@@ -1,2 +1,1 @@
-# noteTaker-Module11Challenge
-Note Taker program using express.js back end.
+# Note Taker Starter Code
