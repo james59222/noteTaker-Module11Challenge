@@ -1,12 +1,13 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 //const api = require('./routes/index.js');
 
 const PORT = process.env.port || 3001;
 
 const app = express();
 const uuid = require('./helpers/uuid');
-
+const Notes = require('./db/db.json');
 
 // Middleware for parsing JSON and urlencoded form data
 app.use(express.json());
@@ -31,11 +32,31 @@ app.get('*', (req, res) => {
 //function to create new notes 
 
 
+fs.readFile('./db/db.json', 'utf8', (err, data) => {
+    if (err) {
+      console.error(err);
+    } else {
+      // Convert string into JSON object
+      const parsedNOTES = JSON.parse(data);
+
+      // Add a new review
+      parsedNOTES.push();
+
+
+fs.writeFile(
+    './db/db.json',
+    JSON.stringify(Notes, null, 4),
+    (writeErr) =>
+      writeErr
+        ? console.error(writeErr)
+        : console.info('Successfully updated Notes!')
+  );
+}
+});
 //create new notes need to include uuid.
 app.post('/api/notes', (req, res) => {
 console.info(`${req.method} request received to add a note`);
-const newNote = createNewNote(req.body, Notes);
-res.json(newNote);
+
 });
 
 
