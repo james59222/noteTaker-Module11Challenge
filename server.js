@@ -3,11 +3,11 @@ const path = require('path');
 const fs = require('fs');
 //const api = require('./routes/index.js');
 
-const PORT = process.env.port || 3001;
+const PORT = process.env.PORT || 3001;
 
 const app = express();
 const uuid = require('./helpers/uuid');
-const Notes = require('./db/db.json');
+let Notes = require('./db/db.json');
 
 // Middleware for parsing JSON and urlencoded form data
 app.use(express.json());
@@ -25,24 +25,31 @@ app.get('/notes', (req, res) => {
 });
 
 // GET * should return the index.html file.
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, './public/index.html'));
-});
+// app.get('*', (req, res) => {
+//     res.sendFile(path.join(__dirname, './public/index.html'));
+// });
 
 //function to create new notes 
+app.get('/api/notes',(req,res)=> {
+    Notes=JSON.parse(fs.readFileSync('./db/db.json','UTF8'))
+    res.json(Notes)
+})
 
 
-fs.readFile('./db/db.json', 'utf8', (err, data) => {
-    if (err) {
-      console.error(err);
-    } else {
-      // Convert string into JSON object
-      const parsedNOTES = JSON.parse(data);
-
-      // Add a new review
-      parsedNOTES.push();
 
 
+
+
+
+//create new notes need to include uuid.
+app.post('/api/notes', (req, res) => {
+console.info(`${req.method} request received to add a note`);
+let newNote={
+    title: req.body.title,
+    text: req.body.text,
+    id: uuid()
+}
+Notes.push(newNote)
 fs.writeFile(
     './db/db.json',
     JSON.stringify(Notes, null, 4),
@@ -51,16 +58,10 @@ fs.writeFile(
         ? console.error(writeErr)
         : console.info('Successfully updated Notes!')
   );
-}
-});
-//create new notes need to include uuid.
-app.post('/api/notes', (req, res) => {
-console.info(`${req.method} request received to add a note`);
-
+  res.json(Notes)
 });
 
 
-//read notes
 
 //delete notes for extra credit.
 
