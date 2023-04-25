@@ -64,7 +64,24 @@ fs.writeFile(
 
 
 //delete notes for extra credit.
-
+app.delete('/api/notes/:id',(req,res)=> {
+  let keepNotes = []
+  for (let i=0;i<Notes.length;i++){
+    if (Notes[i].id !=req.params.id){
+      keepNotes.push(Notes[i])
+    }
+  }
+Notes=keepNotes 
+fs.writeFile(
+  './db/db.json',
+  JSON.stringify(Notes, null, 4),
+  (writeErr) =>
+    writeErr
+      ? console.error(writeErr)
+      : console.info('Successfully updated Notes!')
+);
+res.json(Notes)
+})
 
 
 app.listen(PORT, () =>
