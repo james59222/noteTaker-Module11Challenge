@@ -36,11 +36,6 @@ app.get('/api/notes',(req,res)=> {
 })
 
 
-
-
-
-
-
 //create new notes need to include uuid.
 app.post('/api/notes', (req, res) => {
 console.info(`${req.method} request received to add a note`);
